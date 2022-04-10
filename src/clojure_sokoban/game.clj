@@ -1,18 +1,20 @@
 (ns clojure-sokoban.game
   (:require [lanterna.terminal :as t])
-  (:require [clojure-sokoban.level :as level])
-  (:require [clojure-sokoban.point :as point]))
+  (:require [clojure-sokoban.level :as level]))
 
 (defn location-from [location key-press]
   (case key-press
-    :left  (point/at-location (- (:x location) 1) (:y location))
-    :right (point/at-location (+ (:x location) 1) (:y location))
-    :up    (point/at-location (:x location) (- (:y location) 1))
-    :down  (point/at-location (:x location) (+ (:y location) 1))))
-    ; (point/at-location (:x location) (:y location))))
+    :left  {:x (- (:x location) 1) :y (:y location)}
+    :right {:x (+ (:x location) 1) :y (:y location)}
+    :up    {:x (:x location) :y (- (:y location) 1)}
+    :down  {:x (:x location) :y (+ (:y location) 1)}))
 
-(defn run [term location]
-  (level/display term "resources/1.lvl")
-  (t/move-cursor term (:x location) (:y location))
-  (run term (location-from location (t/get-key-blocking term))))
+(defn run [{:keys [term hero level]}]
+  (level/display {:term term :lines level :hero hero})
+  (t/move-cursor term (:x hero) (:y hero))
+  (run {
+        :term term
+        :hero (location-from hero (t/get-key-blocking term))
+        :level [] }
+       ))
 
