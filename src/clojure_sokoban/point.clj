@@ -1,4 +1,4 @@
 (ns clojure-sokoban.point)
 
-(defn new [x y]
+(defn at-location [x y]
   {:x x :y y})

@@ -8,5 +8,5 @@
 
 (defn -main []
   (t/start term)
-  ; (game/run term (point/new 10 10)))
-  (level/print term "resources/1.lvl"))
+  ; (game/run term (point/at-location 10 10)))
+  (level/display term "resources/1.lvl"))
