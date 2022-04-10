@@ -4,16 +4,16 @@
 (defn read-lines [file-name]
   (map butlast (re-seq #"[^\n]+\n" (slurp file-name))))
 
-(defn to-row [row line]
+(defn row [line y]
   (map-indexed
-    (fn [column character] {:x column :y row :ch character}) line))
+    (fn [x character] {:x x :y y :ch character}) line))
 
-(defn from-file [file-name]
+(defn read-level [file-name]
   (flatten
-    (map-indexed (fn [row line] (to-row row line))
+    (map-indexed (fn [y line] (row line y))
                  (read-lines file-name))))
 
 (defn display [term file-name]
-  (doseq [tile (from-file file-name)]
+  (doseq [tile (read-level file-name)]
     (t/put-character term (:ch tile) (:x tile) (:y tile)))
   (t/get-key-blocking term))
