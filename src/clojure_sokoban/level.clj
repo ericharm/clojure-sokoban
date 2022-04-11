@@ -13,3 +13,18 @@
       (s/put-string term (:x tile) (:y tile) (str (:ch tile)))))
   (s/put-string term (:x hero) (:y hero) "@"))
 
+(defn char-at [{:keys [x y]} level]
+  (nth (nth level y) x))
+
+(defn move [by from level]
+  (let [new-location {:x (+ (:x from) (:x by)) :y (+ (:y from) (:y by))}
+        ch (char-at new-location level)]
+    (if (= ch \#) from new-location)))
+
+(defn location-from [{:keys [location level]} key-press]
+  (case key-press
+    :left  (move {:x -1 :y 0} location level)
+    :right (move {:x 1 :y 0} location level)
+    :up    (move {:x 0 :y -1} location level)
+    :down  (move {:x 0 :y 1} location level)))
+
