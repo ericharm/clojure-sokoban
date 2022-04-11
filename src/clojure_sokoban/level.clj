@@ -16,10 +16,28 @@
 (defn char-at [{:keys [x y]} level]
   (nth (nth level y) x))
 
-(defn move [by from level]
-  (let [new-location {:x (+ (:x from) (:x by)) :y (+ (:y from) (:y by))}
+(defn next-location [by from]
+  {:x (+ (:x from) (:x by)) :y (+ (:y from) (:y by))})
+
+(defn move-boulder [by from level]
+  (let [new-location (next-location by from)
         ch (char-at new-location level)]
-    (if (= ch \#) from new-location)))
+    (case ch
+      \# false
+      \0 false
+      true)))
+; maybe we return a new state
+; and compare it to the old state
+; OR we actually keep every state in a list
+; and we can compare the current state to the last one
+
+(defn move [by from level]
+  (let [new-location (next-location by from)
+        ch (char-at new-location level)]
+    (case ch
+      \# from
+      \0 (if (move-boulder by new-location level) new-location from)
+      new-location)))
 
 (defn location-from [{:keys [location level]} key-press]
   (case key-press
