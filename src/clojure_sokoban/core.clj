@@ -1,13 +1,13 @@
 (ns clojure-sokoban.core
-  (:require [lanterna.terminal :as t])
+  (:require [lanterna.screen :as s])
   (:require [clojure-sokoban.level :as level])
   (:require [clojure-sokoban.game :as game]))
 
 (def state
-  { :term  (t/get-terminal :unix)
+  { :term  (s/get-screen :unix)
     :hero  {:x 3 :y 1}
     :level (level/read-lines "resources/1.lvl") })
 
 (defn -main []
-  (t/start (:term state))
+  (s/start (:term state))
   (game/run state))

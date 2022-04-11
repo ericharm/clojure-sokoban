@@ -1,5 +1,5 @@
 (ns clojure-sokoban.level
-  (:require [lanterna.terminal :as t]))
+  (:require [lanterna.screen :as s]))
 
 (defn read-lines [file-name]
   (vec (map vec (butlast (re-seq #"[^\n]+\n" (slurp file-name))))))
@@ -10,6 +10,6 @@
 (defn display [{:keys [term lines hero]}]
   (doseq [line (map-indexed (fn [y line] (row line y)) lines)]
     (doseq [tile line]
-      (t/put-character term (:ch tile) (:x tile) (:y tile))))
-  (t/put-character term \@ (:x hero) (:y hero)))
+      (s/put-string term (:x tile) (:y tile) (str (:ch tile)))))
+  (s/put-string term (:x hero) (:y hero) "@"))
 
