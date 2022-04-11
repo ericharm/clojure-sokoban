@@ -1,8 +1,8 @@
 (ns clojure-sokoban.level
   (:require [lanterna.screen :as s]))
 
-(defn read-lines [file-name]
-  (vec (map vec (butlast (re-seq #"[^\n]+\n" (slurp file-name))))))
+(defn from-file [file-name]
+  (mapv vec (map butlast (re-seq #"[^\n]+\n" (slurp file-name)))))
 
 (defn row [line y]
   (map-indexed (fn [x ch] {:ch ch :x x :y y}) line))

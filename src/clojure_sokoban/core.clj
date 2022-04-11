@@ -6,7 +6,7 @@
 (def state
   { :term  (s/get-screen :unix)
     :hero  {:x 3 :y 1}
-    :level (level/read-lines "resources/1.lvl") })
+    :level (level/from-file "resources/1.lvl") })
 
 (defn -main []
   (s/start (:term state))
