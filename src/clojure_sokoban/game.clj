@@ -11,10 +11,12 @@
   (s/move-cursor scr (:x hero) (:y hero))
   (s/redraw scr))
 
-(defn update! [{:keys [scr hero level]} key-press]
+(defn update [{:keys [scr hero level]} key-press]
+  (let [location (level/location-from {:location hero :level level} key-press)
+        from-char (level/char-at (:x hero) (:y hero))]
   {:scr scr
-    :hero (level/location-from {:location hero :level level} key-press)
-    :level level })
+    :hero location
+    :level (level/update level from-char location)}))
 
 (defn run [state]
   (draw state)
@@ -22,4 +24,4 @@
         key-press (s/get-key-blocking scr)]
     (case key-press
       \q (kill scr)
-      (run (update! state key-press)))))
+      (run (update state key-press)))))
