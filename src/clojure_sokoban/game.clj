@@ -5,10 +5,9 @@
 (defn kill [scr]
   (and (s/clear scr) (s/stop scr)))
 
-(defn draw [{:keys [scr level]}]
+(defn draw [scr level]
   (s/clear scr)
   (entities/display {:scr scr :level level})
-  ; (s/move-cursor scr (:x hero) (:y hero))
   (s/redraw scr))
 
 (defn location-from [[x y] key-press]
@@ -18,16 +17,18 @@
     :up    [x (- y 1)]
     :down  [x (+ y 1)]))
 
-(defn update-game [{:keys [scr level]} key-press]
-  (let [loc (entities/hero-location level)]
-  {:scr scr
-    ; :hero {:x 3 :y 1}
-    :level (entities/push-entity loc (location-from loc key-press) level)}))
+(defn update-game [scr level_history key-press]
+  (let [ level (last level_history)
+        hero (entities/hero-in-level level)
+        new-loc (location-from (:location hero) key-press)
+        next-state (entities/push-entity hero new-loc level)
+        ] {
+           :scr scr
+           :level_history (conj level_history next-state)}))
 
-(defn run [state]
-  (draw state)
-  (let [scr (:scr state)
-        key-press (s/get-key-blocking scr)]
+(defn run [{:keys [scr level_history]}]
+  (draw scr (last level_history))
+  (let [key-press (s/get-key-blocking scr)]
     (case key-press
       \q (kill scr)
-      (run (update-game state key-press)))))
+      (run (update-game scr level_history key-press)))))

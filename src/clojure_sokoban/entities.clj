@@ -3,7 +3,7 @@
 
 (defn to-entity [ch location]
   (let [t (case ch \@ :hero \# :wall \0 :boulder \^ :pit \X :exit nil)]
-    (if t {:ch ch :type t :location location} nil)))
+    (if t {:ch ch :type t :location location :id (.toString (java.util.UUID/randomUUID))} nil)))
 
 (defn to-entities [line y]
   (filter some? (map-indexed #(to-entity %2 [%1 y]) line)))
@@ -17,16 +17,29 @@
     (let [[x y] (:location entity) ch (:ch entity)]
       (s/put-string scr x y (str ch)))))
 
-(defn push-entity [from to level]
+(defn eq-entity [entity1 entity2]
+  (= (:id entity1) (:id entity2)))
+
+(defn push-entity [entity to level]
+  ; Returns a new level, moving entities at one location
+  ; to another location.
+
+  ; we really want to specify entities by an id or memory address
   (map
-    (fn [entity] (if (= from (:location entity)) (assoc entity :location to) entity))
+    (fn [current_entity] (
+                  if (eq-entity  entity current_entity)
+                  (assoc current_entity :location to)
+                  current_entity
+                  )
+      )
     level))
 ; (let [ent (first (filter #(= (from) (:location %)) level))
 ;       new-ent (assoc ent :location to)]
 ;   (conj level new-ent)))
 
-(defn hero-location [level]
-  (:location (first (filter #(= (:type %) :hero) level))))
+(defn hero-in-level [level]
+  ; Returns an entity
+  (first (filter #(= (:type %) :hero) level)))
 
 ;;; testing
 ; (def level (from-file "resources/1.lvl"))
