@@ -21,7 +21,7 @@
   (let [ level (last level_history)
         hero (entities/hero-in-level level)
         new-loc (location-from (:location hero) key-press)
-        next-state (entities/push-entity hero new-loc level)
+        next-state (entities/push-entity hero new-loc level_history)
         ] {
            :scr scr
            :level_history (conj level_history next-state)}))
