@@ -16,3 +16,28 @@
   (doseq [entity level]
     (let [[x y] (:location entity) ch (:ch entity)]
       (s/put-string scr x y (str ch)))))
+
+(defn push-entity [from to level]
+  (map
+    (fn [entity] (if (= from (:location entity)) (assoc entity :location to) entity))
+    level))
+; (let [ent (first (filter #(= (from) (:location %)) level))
+;       new-ent (assoc ent :location to)]
+;   (conj level new-ent)))
+
+(defn hero-location [level]
+  (:location (first (filter #(= (:type %) :hero) level))))
+
+;;; testing
+; (def level (from-file "resources/1.lvl"))
+
+; (defn location-from [[x y] key-press]
+;   (case key-press
+;     :left  [(- x 1) y]
+;     :right [(+ x 1) y]
+;     :up [x (- y 1)]
+;     :down [x (+ y 1)]))
+
+; (def hero-loc (hero-location level))
+; (def new-location (location-from hero-loc :right))
+; (push-entity hero-loc new-location level)
