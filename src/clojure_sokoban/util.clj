@@ -2,6 +2,9 @@
   (:require [lanterna.screen :as s])
   )
 
+(defn kill [scr]
+  (and (s/clear scr) (s/stop scr)))
+
 ; maybe this is more of a game method than a util?
 (defn location-from [[x y] key-press]
   ; Returns a location from a location [x y] given a keypress

@@ -4,8 +4,7 @@
   (:require [clojure-sokoban.entities :as entities])
   (:require [clojure-sokoban.hero :as hero]))
 
-(defn kill [scr]
-  (and (s/clear scr) (s/stop scr)))
+(def initial-state (entities/from-file "resources/1.lvl"))
 
 (defn draw [scr entities]
   (s/clear scr)
@@ -24,12 +23,16 @@
 (defn undo [history]
   (if (> (count history) 1) (vec (butlast history)) history))
 
-(defn run [screen history]
-  ; The input/update/draw loop
-  (draw screen (last history))
-  ; (draw screen history)
-  (let [key-press (s/get-key-blocking screen)]
-    (case key-press
-      \q (kill screen)
-      \u (run screen (undo history))
-      (run screen (conj history (update-game history key-press))))))
+(defn run
+  ([screen history]
+   ; The input/update/draw loop
+   (draw screen (last history))
+   ; (draw screen history)
+   (let [key-press (s/get-key-blocking screen)]
+     (case key-press
+       \q (util/kill screen)
+       \u (run screen (undo history))
+       (run screen (conj history (update-game history key-press))))))
+  ([args]
+       (run (:screen args) (conj [] initial-state))))
+
