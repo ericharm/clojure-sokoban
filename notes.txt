@@ -1,0 +1,3 @@
+ there is a branch called move hero
+ probably the idea was to do as many other of my sokoban implementations have done
+ have the hero be a special entity, and move it around without having to look for it
