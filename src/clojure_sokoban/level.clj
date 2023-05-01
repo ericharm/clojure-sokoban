@@ -15,6 +15,10 @@
 (defn entities-without-player [entities]
   (filter #(not= (:type %) :player) entities))
 
+(defn move-player [level direction]
+  (let [player (:player level)]
+   (assoc level :player (entity/move player direction))))
+
 (defn create []
   (let [all-entities (level-from-file "resources/1.lvl")]
     {:player (player-from-entities all-entities)

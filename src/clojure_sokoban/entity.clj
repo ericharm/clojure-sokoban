@@ -13,6 +13,14 @@
    :type type
    :color color})
 
+(defn move [entity direction]
+  (let [[x y] (:location entity)]
+    (case direction
+      :left (assoc entity :location [(dec x) y])
+      :right (assoc entity :location [(inc x) y])
+      :up (assoc entity :location [x (dec y)])
+      :down (assoc entity :location [x (inc y)]))))
+
 (defn create-player [x y]
   (create x y \@ :player :magenta))
 
@@ -36,4 +44,3 @@
     \^ (create-pit x y)
     \X (create-exit x y)
     nil))
-    ; (create-empty x y)))
