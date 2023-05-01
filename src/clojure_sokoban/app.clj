@@ -11,4 +11,3 @@
   (s/redraw screen)
   (let [key (s/get-key-blocking screen)]
     (run ((:key-pressed state) state key) screen)))
-

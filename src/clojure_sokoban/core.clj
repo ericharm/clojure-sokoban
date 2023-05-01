@@ -2,9 +2,8 @@
   (:require [lanterna.screen :as s])
   (:require [clojure-sokoban.app :as app]))
 
-(def app (app/create-app))
-
 (def screen (s/get-screen :unix))
+(def app (app/create-app))
 
 (defn -main []
   (let [state (:current-state app)]
