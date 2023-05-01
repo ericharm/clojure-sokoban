@@ -6,6 +6,5 @@
 (defn except [entities entity]
   (filter #(not= (:id %) (:id entity)) entities))
 
-(defn entity-at [level location]
-  (let [entities (:entities level)]
-    (first (filter #(= (:location %) location) entities))))
+(defn entity-at [entities location]
+  (first (filter #(= (:location %) location) entities)))

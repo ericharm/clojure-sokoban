@@ -1,10 +1,12 @@
 (ns clojure-sokoban.game
-  (:require [clojure-sokoban.level :as level]))
+  (:require [clojure-sokoban.level :as level]
+            [lanterna.screen :as s]))
 
 (defn draw [game screen]
   (let [level (:level game)
         player (:player level)
         entities (:entities level)]
+    (s/move-cursor screen 0 0)
     (doseq [entity entities]
       ((:draw entity) entity screen))
     ((:draw player) player screen)))
