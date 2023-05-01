@@ -15,9 +15,18 @@
 (defn entities-without-player [entities]
   (filter #(not= (:type %) :player) entities))
 
+(defn entity-at-location [level location]
+  (let [entities (:entities level)]
+    (first (filter #(= (:location %) location) entities))))
+
 (defn move-player [level direction]
-  (let [player (:player level)]
-   (assoc level :player (entity/move player direction))))
+  (let [player (:player level)
+        new-player (entity/move player direction)
+        new-location (:location new-player)
+        entity-at-new-location (entity-at-location level new-location)]
+    (if (nil? entity-at-new-location)
+      (assoc level :player new-player)
+      level)))
 
 (defn create []
   (let [all-entities (level-from-file "resources/1.lvl")]
