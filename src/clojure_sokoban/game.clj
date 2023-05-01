@@ -1,13 +1,13 @@
 (ns clojure-sokoban.game
-  (:require [clojure-sokoban.level :as level])
-  (:require [clojure-sokoban.player :as player]))
+  (:require [clojure-sokoban.level :as level]))
 
 (defn draw [game screen]
-  (let [player (:player game)
-        entities (:entities game)]
-    ((:draw player) player screen)
+  (let [level (:level game)
+        player (:player level)
+        entities (:entities level)]
     (doseq [entity entities]
-      ((:draw entity) entity screen))))
+      ((:draw entity) entity screen))
+    ((:draw player) player screen)))
 
 (defn key-pressed [menu key]
   (case key
@@ -15,7 +15,6 @@
     menu))
 
 (defn create []
-  {:player (player/create 3 3)
-   :entities (level/entities-from-file "resources/1.lvl")
+  {:level (level/create)
    :draw draw
    :key-pressed key-pressed})
